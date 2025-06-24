@@ -60,8 +60,7 @@ nltk.download('stopwords')
 ├── requirements.txt
 ├── static/         
 │   ├── builder.css
-│   ├── styles.css 
-│   └── temp.css           
+│   ├── styles.css      
 └── templates/        
     ├── ats_score.html
     ├── builder.html  

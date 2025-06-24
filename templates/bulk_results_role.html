@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bulk Resume Results - Job Role Match</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <style>
+        /* Hero Section Adjustments */
+        .hero-results {
+            padding: 20px 20px;
+            text-align: left;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-results .hero-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-left: 30px;
+        }
+
+        .hero-results h1 {
+            font-size: 56px;
+            margin-bottom: 15px;
+            line-height: 1.2;
+        }
+
+        .hero-results p {
+            font-size: 22px;
+            margin-bottom: 20px;
+            max-width: 800px;
+        }
+
+        /* Main Content Styling */
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .content-split {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .left-section {
+            flex: 1;
+            padding: 30px;
+            max-width: 40%;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 8px;
+            margin-right: 20px;
+        }
+
+        .right-section {
+            flex: 1.5;
+            padding: 30px;
+            max-height: 600px;
+            overflow-y: auto;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 8px;
+        }
+
+        .resume-item {
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            background-color: rgba(255, 255, 255, 0.15);
+            border-left: 4px solid #007bff;
+            transition: transform 0.2s, background-color 0.2s;
+            cursor: pointer; /* Add cursor pointer to indicate clickable */
+        }
+
+        .resume-item:hover {
+            transform: translateY(-3px);
+            background-color: rgba(255, 255, 255, 0.25);
+        }
+
+        .resume-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .similarity-score {
+            font-weight: 600;
+            color: #fff;
+            font-size: 18px;
+            margin-top: 5px;
+        }
+
+        .job-role-skills {
+            white-space: pre-line;
+            line-height: 1.6;
+            color: #fff;
+        }
+
+        .section-title {
+            margin-top: 0;
+            color: #fff;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .button-group {
+            margin-top: 30px;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+        }
+
+        .option-button {
+            display: inline-block;
+            background-color: rgba(0, 123, 255, 0.8);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 4px;
+            text-decoration: none;
+            margin: 0 auto;
+            transition: background-color 0.3s, transform 0.2s;
+            font-size: 16px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            max-width: 250px;
+            width: auto;
+        }
+
+        .option-button:hover {
+            background-color: rgba(0, 123, 255, 0.9);
+            transform: translateY(-2px);
+        }
+
+        .skill-tag {
+            display: inline-block;
+            background-color: rgba(0, 123, 255, 0.3);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            margin-right: 8px;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .job-role-skills {
+            white-space: normal;  /* Changed from pre-line to normal */
+            line-height: 1.6;
+            color: #fff;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .content-split {
+                flex-direction: column;
+            }
+
+            .left-section {
+                max-width: 100%;
+                margin-right: 0;
+                margin-bottom: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <header class="navbar">
+        <div class="container">
+            <a href="{{ url_for('index') }}" class="logo-link">
+                <img src="{{ url_for('static', filename='favicon.ico') }}" alt="Resume Decoder Logo" class="logo">
+                <h1>Resume Decoder</h1>
+            </a>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="{{ url_for('index') }}">Home</a></li>
+                    <li><a href="{{ url_for('index') }}#features">Features</a></li>
+                    <li><a href="{{ url_for('index') }}#how-it-works">How It Works</a></li>
+                    <li><a href="{{ url_for('index') }}#testimonials">Testimonials</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-results">
+        <div class="hero-content">
+            <h1>Bulk Resume Results</h1>
+            <p>Here are the ranked resumes based on their similarity to the selected job role: <strong>{{ job_role }}</strong></p>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="content-split">
+            <!-- Left Section: Job Role Skills -->
+            <div class="left-section">
+                <h2 class="section-title">Required Skills for {{ job_role }}</h2>
+                <div class="job-role-skills">
+                    {% for skill in skills %}
+                    <span class="skill-tag">{{ skill }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+            
+            <!-- Right Section: Ranked Resumes -->
+            <div class="right-section">
+                <h2 class="section-title">Ranked Resumes</h2>
+                {% for resume in resumes %}
+                <div class="resume-item" onclick="window.open('{{ url_for('serve_resume', filename=resume.filename) }}', '_blank')">
+                    <h3>{{ resume.filename }}</h3>
+                    <div class="similarity-score">Similarity Score: {{ "%.2f"|format(resume.similarity_score * 100) }}%</div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="button-group">
+            <a href="{{ url_for('bulk_screen') }}" class="option-button">Return to Resume Screening</a>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="sticky-footer">
+        <div class="container">
+            <p>Made by Prakhar Singh</p>
+            <a href="https://github.com/prakharssingh" target="_blank">
+                <img src="{{ url_for('static', filename='github-icon.png') }}" alt="GitHub" class="github-icon">
+            </a>
+        </div>
+    </footer>
+</body>
+</html>

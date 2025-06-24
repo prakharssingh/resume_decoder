@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ resume.bioData.name|default('Resume') }}</title>
+    <style>
+        /* Reset and Base Styles - Scoped to this template only */
+        .resume-template-page {
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #000;
+            line-height: 1.5;
+            font-size: 14px !important;
+            font-family: 'Helvetica', Times, serif;
+        }
+        
+        /* Page Setup */
+        @page {
+            size: 8.5in 11in;
+            margin: 0;
+        }
+        
+        .resume-template-page * {
+            box-sizing: border-box;
+            -webkit-print-color-adjust: exact !important;
+            color-adjust: exact !important;
+            color: #000 !important; /* Force all text to be black */
+        }
+        
+        .resume-container {
+            width: 8.5in;
+            min-height: 11in;
+            margin: 0 auto;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 0.5in;
+            position: relative;
+            page-break-after: always;
+        }
+        
+        /* Header Styles */
+        .resume-header {
+            text-align: center;
+            margin-bottom: 5px;
+            color: #000;
+        }
+        
+        .resume-header h1 {
+            font-size: 24px !important;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #000;
+        }
+        
+        .contact-info {
+            font-size: 14px !important;
+            margin-bottom: 5px;
+            color: #000;
+        }
+        
+        /* Section Styles */
+        .section-title {
+            font-size: 20px !important;
+            font-weight: bold;
+            text-transform: capitalize;  /* Changed from uppercase to capitalize */
+            margin-top: 5px;
+            margin-bottom: 0px; /* Reduced from 5px to 3px */
+            border-bottom: 2px solid #000; /* Increased from 1px to 2px */
+            color: #000 !important;
+            text-align: left !important;  /* Added !important to ensure left alignment */
+        }
+        
+        /* Content Styles */
+        .resume-section {
+            margin-bottom: 5px;
+            color: #000;
+        }
+        
+        /* Skills Section */
+        .skills-list {
+            display: flex;
+            flex-wrap: wrap;
+            color: #000;
+        }
+        
+        .skill-item {
+            margin-right: 10px;
+            font-size: 14px !important;
+            color: #000;
+        }
+        
+        /* Experience Section */
+        .experience-item, 
+        .education-item, 
+        .project-item {
+            margin-bottom: 2px;
+            font-size: 14px !important;
+            color: #000;
+        }
+        
+        .company-line, 
+        .institution-line{
+            display: flex;
+            justify-content: space-between;
+            font-family: 'Helvetica', Times, serif;
+            font-weight: bold;
+            font-size: 14px !important;
+            margin-bottom: 2px;
+            color: #000;
+        }
+        .project-header {
+            display: flex;
+            justify-content: space-between;
+            font-family: 'Helvetica', Times, serif;
+            font-size: 14px !important;
+            margin-bottom: 2px;
+            color: #000;
+        }
+        
+        .location {
+            font-weight: normal;
+        }
+        
+        .job-line, 
+        .degree-line {
+            display: flex;
+            justify-content: space-between;
+            font-style: italic;
+            margin-bottom: 5px;
+            color: #000;
+        }
+        
+        .job-description, 
+        .project-description {
+            margin-top: 5px;
+            white-space: pre-line;
+            color: #000;
+        }
+        .achievements {
+            margin-top: 5px;
+            font-size: 14px !important;
+            white-space: pre-line;
+            color: #000;
+        }
+        
+        /* List Styles */
+        .resume-template-page ul {
+            padding-left: 0;
+            margin-top: 5px;
+            margin-bottom: 5px;
+            color: #000;
+            list-style-type: none;
+        }
+        
+        .resume-template-page li {
+            margin-bottom: 3px;
+            color: #000;
+            display: flex;
+            align-items: flex-start;
+        }
+        
+        .resume-template-page li::before {
+            content: "•";
+            display: inline-block;
+            width: 1em;
+            margin-right: 0.5em;
+            flex-shrink: 0;
+        }
+        
+        /* Link styles */
+        .resume-template-page a {
+            color: #000 !important;
+        }
+        
+        .project-header a {
+            color: #000 !important;
+        }
+        
+        /* Additional specific link styling to override browser defaults */
+        .resume-container a,
+        .resume-header a,
+        .contact-info a,
+        .project-item a {
+            color: #000 !important;
+        }
+        
+        /* Force all links to be black in all states */
+        a:link, a:visited, a:hover, a:active {
+            color: #000 !important;
+        }
+        
+        /* Print Styles */
+        @media print {
+            .resume-template-page {
+                background-color: white;
+                color: #000;
+            }
+            
+            .resume-container {
+                box-shadow: none;
+                padding: 0.5in;
+                width: 100%;
+                height: 100%;
+                color: #000;
+            }
+        }
+    </style>
+</head>
+<body class="resume-template-page">
+    <div class="resume-container">
+        <!-- Header Section -->
+        <header class="resume-header">
+            <h1 style="font-size: 28px !important;">{{ resume.bioData.name|default('Full Name') }}</h1>
+            <div class="contact-info">
+                {% if resume.bioData.github %}<a href="{{ resume.bioData.github }}">GitHub</a> | {% endif %}
+                {% if resume.bioData.linkedin %}<a href="{{ resume.bioData.linkedin }}">LinkedIn</a> | {% endif %}
+                {% if resume.bioData.portfolio %}<a href="{{ resume.bioData.portfolio }}">Portfolio</a> | {% endif %}
+                {% if resume.bioData.email %}<a href="mailto:{{ resume.bioData.email }}">{{ resume.bioData.email }}</a>{% endif %}
+                {% if resume.bioData.phone %} | {{ resume.bioData.phone }}{% endif %}
+                {% if resume.bioData.location %} | {{ resume.bioData.location }}{% endif %}
+            </div>
+        </header>
+        
+        <!-- Professional Summary Section -->
+        {% if resume.bioData.summary %}
+        <div class="resume-section">
+            <h2 class="section-title" style="text-align: left; text-transform: capitalize; font-weight: normal;">Professional Summary</h2>
+            <p>{{ resume.bioData.summary }}</p>
+        </div>
+        {% endif %}
+        
+        <!-- Skills Section -->
+        {% if resume.skills and resume.skills|length > 0 %}
+        <div class="resume-section">
+            <h2 class="section-title" style="text-align: left; text-transform: capitalize; font-weight: normal;">Skills</h2>
+            <div>
+                {% set skill_parts = [] %}
+                {% for skill in resume.skills %}
+                    {% if skill.name %}
+                        {% set skill_text = skill.name %}
+                        {% if skill.level %}
+                            {% set skill_text = skill_text + " (" + skill.level + ")" %}
+                        {% endif %}
+                        {% set _ = skill_parts.append(skill_text) %}
+                    {% endif %}
+                {% endfor %}
+                
+                <div style="display: flex; flex-wrap: wrap;">
+                    {% for skill in skill_parts %}
+                        <div style="margin-right: 15px; margin-bottom: 5px; white-space: nowrap; font-size: 14px !important;">• {{ skill }}</div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        
+        <!-- Work Experience Section -->
+        {% if resume.experience and resume.experience|length > 0 %}
+        <div class="resume-section">
+            <h2 class="section-title" style="text-align: left; text-transform: capitalize; font-weight: normal;">Work Experience</h2>
+            {% for job in resume.experience %}
+            <div class="experience-item">
+                <div class="company-line">
+                    <span>{{ job.company }}</span>
+                    <span>
+                        {% if job.remote %}
+                            <span class="location">Remote</span>
+                        {% elif job.location %}
+                            <span class="location">{{ job.location }}</span>
+                        {% endif %}
+                    </span>
+                </div>
+                <div class="job-line">
+                    <span><em>{{ job.title }}</em></span>
+                    <span><em>
+                        {% if job.startDate %}
+                            {% set start_parts = job.startDate.split('-') %}
+                            {% if start_parts|length >= 2 %}
+                                {% set month_names = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'] %}
+                                {% set month = start_parts[1]|int %}
+                                {% if month >= 1 and month <= 12 %}
+                                    {{ month_names[month-1] }} {{ start_parts[0] }}
+                                {% else %}
+                                    {{ job.startDate }}
+                                {% endif %}
+                            {% else %}
+                                {{ job.startDate }}
+                            {% endif %}
+                        {% endif %}
+                        {% if job.startDate and (job.current or job.endDate) %}- {% endif %}
+                        {% if job.current %}
+                            Present
+                        {% elif job.endDate %}
+                            {% set end_parts = job.endDate.split('-') %}
+                            {% if end_parts|length >= 2 %}
+                                {% set month_names = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'] %}
+                                {% set month = end_parts[1]|int %}
+                                {% if month >= 1 and month <= 12 %}
+                                    {{ month_names[month-1] }} {{ end_parts[0] }}
+                                {% else %}
+                                    {{ job.endDate }}
+                                {% endif %}
+                            {% else %}
+                                {{ job.endDate }}
+                            {% endif %}
+                        {% endif %}
+                    </em></span>
+                </div>
+                {% if job.description %}
+                    {% if '\n' in job.description %}
+                    <div>
+                        {% for line in job.description.split('\n') %}
+                            {% if line.strip() %}
+                            <div style="margin-bottom: 3px;">• {{ line.strip() }}</div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div>{{ job.description }}</div>
+                    {% endif %}
+                {% endif %}
+                {% if job.achievements %}
+                <div style="font-size: 14px !important;"><strong style="font-size: 14px !important;">Achievements:</strong> <span class="achievements" style="font-size: 14px !important;">{{ job.achievements }}</span></div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        
+        <!-- Education Section -->
+        {% if resume.education and resume.education|length > 0 %}
+        <div class="resume-section">
+            <h2 class="section-title" style="text-align: left; text-transform: capitalize; font-weight: normal;">Education</h2>
+            {% for edu in resume.education %}
+            <div class="education-item">
+                <div class="institution-line">
+                    <span>{{ edu.institution }}</span>
+                    <span>
+                        {% if edu.location %}<span class="location">{{ edu.location }}</span>{% endif %}
+                    </span>
+                </div>
+                <div class="degree-line">
+                    <span><em>{{ edu.degree }}</em></span>
+                    <span><em>
+                        {% if edu.startDate %}
+                            {% set start_parts = edu.startDate.split('-') %}
+                            {% if start_parts|length >= 2 %}
+                                {% set month_names = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'] %}
+                                {% set month = start_parts[1]|int %}
+                                {% if month >= 1 and month <= 12 %}
+                                    {{ month_names[month-1] }} {{ start_parts[0] }}
+                                {% else %}
+                                    {{ edu.startDate }}
+                                {% endif %}
+                            {% else %}
+                                {{ edu.startDate }}
+                            {% endif %}
+                        {% endif %}
+                        {% if edu.startDate and edu.endDate %}- {% endif %}
+                        {% if edu.endDate %}
+                            {% set end_parts = edu.endDate.split('-') %}
+                            {% if end_parts|length >= 2 %}
+                                {% set month_names = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'] %}
+                                {% set month = end_parts[1]|int %}
+                                {% if month >= 1 and month <= 12 %}
+                                    {{ month_names[month-1] }} {{ end_parts[0] }}
+                                {% else %}
+                                    {{ edu.endDate }}
+                                {% endif %}
+                            {% else %}
+                                {{ edu.endDate }}
+                            {% endif %}
+                        {% endif %}
+                    </em></span>
+                </div>
+                {% if edu.gpa %}
+                <div><strong>GPA:</strong> {{ edu.gpa }}</div>
+                {% endif %}
+                {% if edu.coursework %}
+                <div><strong>Coursework:</strong> {{ edu.coursework }}</div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        
+        <!-- Projects Section -->
+        {% if resume.projects and resume.projects|length > 0 %}
+        <div class="resume-section">
+            <h2 class="section-title" style="text-align: left; text-transform: capitalize; font-weight: normal;">Projects</h2>
+            {% for project in resume.projects %}
+            <div class="project-item">
+                <div class="project-header">
+                    <span><strong>{{ project.name }}</strong></span>
+                    {% if project.link %}
+                    <span><a href="{{ project.link }}">Visit</a></span>
+                    {% endif %}
+                </div>
+                {% if project.description %}
+                    {% if '\n' in project.description %}
+                    <div>
+                        {% for line in project.description.split('\n') %}
+                            {% if line.strip() %}
+                            <div style="margin-bottom: 3px;">• {{ line.strip() }}</div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div>{{ project.description }}</div>
+                    {% endif %}
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        
+        <!-- Achievements Section -->
+        {% if resume.achievements and resume.achievements|length > 0 %}
+        <div class="resume-section">
+            <h2 class="section-title" style="text-align: left; text-transform: capitalize; font-weight: normal;">Achievements</h2>
+            {% if resume.achievements|length == 1 %}
+                {% for achievement in resume.achievements %}
+                    {% if achievement.description %}
+                        <div style="font-size: 14px !important;">{{ achievement.description }}</div>
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                {% for achievement in resume.achievements %}
+                    {% if achievement.description %}
+                        <div style="margin-bottom: 3px; font-size: 14px !important;">• {{ achievement.description }}</div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>

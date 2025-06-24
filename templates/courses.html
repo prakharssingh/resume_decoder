@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Decoder - Course Recommendations</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <style>
+        /* Hero Section Adjustments */
+        .hero-results {
+            padding: 20px 20px;
+            text-align: left;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-results .hero-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-left: 30px;
+        }
+
+        .hero-results h1 {
+            font-size: 56px;
+            margin-bottom: 15px;
+            line-height: 1.2;
+        }
+
+        .hero-results p {
+            font-size: 22px;
+            margin-bottom: 20px;
+            max-width: 800px;
+        }
+
+        .ats-score {
+            font-size: 24px;
+            font-weight: 600;
+            color: #007bff;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px 20px;
+            border-radius: 8px;
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        /* Main Content Adjustments */
+        .main-content {
+            margin-top: 0;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .content-split {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 30px;
+            align-items: center; /* Vertically center right section relative to left section */
+        }
+
+        .left-section,
+        .right-section {
+            flex: 1;
+            padding: 20px;
+        }
+
+        .left-section {
+            border-right: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        /* Info Section Styling */
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .info-item strong {
+            color: #007bff;
+            font-size: 18px;
+            min-width: 150px;
+        }
+
+        .info-item span {
+            color: #fff;
+            font-size: 16px;
+        }
+
+        /* Recommendations Styling */
+        .recommendations-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Center cards horizontally */
+        }
+
+        .recommendations-section h3 {
+            color: #fff;
+            font-size: 24px;
+            margin-bottom: 25px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-align: center;
+        }
+
+        .recommendations-list {
+            list-style: none;
+            padding: 0;
+            display: grid;
+            gap: 20px;
+            width: 100%; /* Ensure list takes full width for centering */
+        }
+
+        .recommendation-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.03));
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 5px solid #007bff;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            width: 70%; /* Fixed width for uniform cards */
+            display: flex; /* Center text */
+            justify-content: center; /* Horizontally center */
+            align-items: center; /* Vertically center */
+            text-align: center; /* Ensure text alignment */
+            margin: 0 auto; /* Center card within list */
+        }
+
+        .recommendation-card p {
+            margin: 0;
+            color: #fff;
+            font-size: 16px;
+            line-height: 1.5;
+            font-weight: 400;
+        }
+
+        /* Button Grid Styling */
+        .button-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .option-button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+            text-align: center;
+            text-decoration: none;
+            width: auto;
+        }
+
+        .option-button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero-results h1 {
+                font-size: 40px;
+            }
+
+            .hero-results p {
+                font-size: 18px;
+            }
+
+            .ats-score {
+                font-size: 20px;
+            }
+
+            .content-split {
+                flex-direction: column;
+                align-items: flex-start; /* Reset to top alignment on mobile */
+            }
+
+            .left-section {
+                border-right: none;
+                border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+            }
+
+            .recommendation-card {
+                width: 100%; /* Full width on mobile */
+            }
+
+            .button-grid {
+                grid-template-columns: 1fr;
+                max-width: 300px;
+            }
+
+            .info-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .info-item strong {
+                min-width: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <header class="navbar">
+        <div class="container">
+            <a href="{{ url_for('index') }}" class="logo-link">
+                <img src="{{ url_for('static', filename='favicon.ico') }}" alt="Resume Decoder Logo" class="logo">
+                <h1>Resume Decoder</h1>
+            </a>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="{{ url_for('index') }}">Home</a></li>
+                    <li><a href="{{ url_for('index') }}#features">Features</a></li>
+                    <li><a href="{{ url_for('index') }}#how-it-works">How It Works</a></li>
+                    <li><a href="{{ url_for('index') }}#testimonials">Testimonials</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-results">
+        <div class="hero-content">
+            <h1>Explore These Courses</h1>
+            <p>Enhance your skills by taking these recommended courses to boost your career prospects.</p>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="content-split">
+            <!-- Left Section: Personal Info -->
+            <div class="left-section">
+                <div class="info-item">
+                    <strong>Name:</strong>
+                    <span>{{ name if name else 'N/A' }}</span>
+                </div>
+                <div class="info-item">
+                    <strong>Contact Number:</strong>
+                    <span>{{ contact_number if contact_number else 'N/A' }}</span>
+                </div>
+                <div class="info-item">
+                    <strong>Email:</strong>
+                    <span>{{ email if email else 'N/A' }}</span>
+                </div>
+                <div class="info-item">
+                    <strong>Education:</strong>
+                    <span>{{ education if education else 'N/A' }}</span>
+                </div>
+                <div class="info-item">
+                    <strong>GPA:</strong>
+                    <span>{{ gpa if gpa else 'N/A' }}</span>
+                </div>
+            </div>
+
+            <!-- Right Section: Course Recommendations -->
+            <div class="right-section">
+                <div class="recommendations-section">
+                    <h3>Recommended Courses</h3>
+                    <ul class="recommendations-list">
+                        {% for course in recommended_courses %}
+                        <a href="{{ course_links[loop.index0] }}" target="_blank" style="color: #fff;text-decoration: none;">
+                        <li class="recommendation-card">
+                            <p>
+                                {{ course }}
+                            </p>
+                        </li>
+                        </a>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Button Grid -->
+        <div class="button-grid">
+            <a href="{{ url_for('ats_score') }}" class="option-button">Check ATS Score</a>
+            <a href="{{ url_for('job_roles') }}" class="option-button">Job Role Recommendations</a>
+            <a href="{{ url_for('skills') }}" class="option-button">Skill Recommendations</a>
+            <a href="{{ url_for('index') }}" class="option-button">Upload Another Resume</a>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="sticky-footer">
+        <div class="container">
+            <p>Made by Prakhar Singh</p>
+            <a href="https://github.com/prakharssingh" target="_blank">
+                <img src="{{ url_for('static', filename='github-icon.png') }}" alt="GitHub" class="github-icon">
+            </a>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Builder - Resume Decoder</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='builder.css') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+    <!-- Navbar -->
+    <header class="navbar">
+        <div class="container">
+            <a href="{{ url_for('index') }}" class="logo-link">
+                <img src="{{ url_for('static', filename='favicon.ico') }}" alt="Resume Decoder Logo" class="logo">
+                <h1>Resume Decoder</h1>
+            </a>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="{{ url_for('index') }}">Home</a></li>
+                    <li><a href="{{ url_for('index') }}#features">Features</a></li>
+                    <li><a href="{{ url_for('index') }}#how-it-works">How It Works</a></li>
+                    <li><a href="{{ url_for('index') }}#testimonials">Testimonials</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Resume Builder</h1>
+            <p>Create a professional resume in minutes with our easy-to-use builder</p>
+        </div>
+        <div class="hero-background"></div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="builder-container">
+        <div class="builder-layout">
+            <!-- Left Side: Form -->
+            <div class="form-container">
+                <form id="resumeForm">
+                    <!-- Bio Data Section -->
+                    <div class="form-section" id="bioDataSection">
+                        <h2>Personal Information</h2>
+                        <div class="form-group">
+                            <label for="name">Full Name</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="summary">Professional Summary</label>
+                            <textarea id="summary" name="summary" rows="3"></textarea>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" id="email" name="email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">Phone</label>
+                                <input type="tel" id="phone" name="phone">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="location">Location</label>
+                            <input type="text" id="location" name="location" placeholder="City, State">
+                        </div>
+                        <div class="form-group">
+                            <label for="linkedin">LinkedIn</label>
+                            <input type="url" id="linkedin" name="linkedin" placeholder="https://linkedin.com/in/username">
+                        </div>
+                        <div class="form-group">
+                            <label for="github">GitHub</label>
+                            <input type="url" id="github" name="github" placeholder="https://github.com/username">
+                        </div>
+                        <div class="form-group">
+                            <label for="portfolio">Portfolio Website</label>
+                            <input type="url" id="portfolio" name="portfolio" placeholder="https://yourwebsite.com">
+                        </div>
+                    </div>
+
+                    <!-- Education Section -->
+                    <div class="form-section" id="educationSection">
+                        <h2>Education <button type="button" class="add-btn" id="addEducation">+ Add</button></h2>
+                        <div id="educationItems">
+                            <!-- Education items will be added here dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- Work Experience Section -->
+                    <div class="form-section" id="experienceSection">
+                        <h2>Work Experience <button type="button" class="add-btn" id="addExperience">+ Add</button></h2>
+                        <div id="experienceItems">
+                            <!-- Experience items will be added here dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- Projects Section -->
+                    <div class="form-section" id="projectsSection">
+                        <h2>Projects <button type="button" class="add-btn" id="addProject">+ Add</button></h2>
+                        <div id="projectItems">
+                            <!-- Project items will be added here dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- Skills Section -->
+                    <div class="form-section" id="skillsSection">
+                        <h2>Skills <button type="button" class="add-btn" id="addSkill">+ Add</button></h2>
+                        <div id="skillItems">
+                            <!-- Skill items will be added here dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- Achievements Section -->
+                    <div class="form-section" id="achievementsSection">
+                        <h2>Achievements <button type="button" class="add-btn" id="addAchievement">+ Add</button></h2>
+                        <div id="achievementItems">
+                            <!-- Achievement items will be added here dynamically -->
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Right Side: Preview -->
+            <div class="preview-container">
+                <h2>Resume Preview</h2>
+                <div class="resume-preview" id="resumePreview">
+                    <!-- Resume preview will be loaded here -->
+                    <div class="placeholder-text">
+                        <p>Your resume preview will appear here as you fill out the form.</p>
+                    </div>
+                </div>
+                <div class="download-container">
+                    <button type="button" id="downloadBtn" class="download-btn">Download Resume</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="sticky-footer">
+        <div class="container">
+            <p>Made by Prakhar Singh</p>
+            <a href="https://github.com/prakharssingh" target="_blank">
+                <img src="{{ url_for('static', filename='github-icon.png') }}" alt="GitHub" class="github-icon">
+            </a>
+        </div>
+    </footer>
+
+    <!-- Templates for dynamic items -->
+    <template id="educationTemplate">
+        <div class="form-item education-item">
+            <div class="form-group">
+                <label>Institution Name</label>
+                <input type="text" name="education[INDEX].institution" required>
+            </div>
+            <div class="form-group">
+                <label>Location</label>
+                <input type="text" name="education[INDEX].location" placeholder="City, State">
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Start Date</label>
+                    <input type="month" name="education[INDEX].startDate" required style="width: 90%;">
+                </div>
+                <div class="form-group">
+                    <label>End Date</label>
+                    <input type="month" name="education[INDEX].endDate" style="width: 90%;">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Degree</label>
+                <input type="text" name="education[INDEX].degree" placeholder="Bachelor's or Master's degree">
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>GPA</label>
+                    <input type="text" name="education[INDEX].gpa" placeholder="7.5/10.0">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Coursework (Optional)</label>
+                <textarea name="education[INDEX].coursework" rows="2" placeholder="Relevant coursework, separated by commas"></textarea>
+            </div>
+            <button type="button" class="remove-btn">Remove</button>
+        </div>
+    </template>
+
+    <template id="experienceTemplate">
+        <div class="form-item experience-item">
+            <div class="form-group">
+                <label>Job Title</label>
+                <input type="text" name="experience[INDEX].title" required>
+            </div>
+            <div class="form-group">
+                <label>Company</label>
+                <input type="text" name="experience[INDEX].company" required>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Start Date</label>
+                    <input type="month" name="experience[INDEX].startDate" required style="width: 90%;">
+                </div>
+                <div class="form-group end-date-group">
+                    <label>End Date</label>
+                    <input type="month" name="experience[INDEX].endDate" style="width: 90%;">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group current-job-group">
+                    <div class="checkbox-container">
+                        <input type="checkbox" id="experience[INDEX].current" name="experience[INDEX].current" class="current-job-checkbox">
+                        <label for="experience[INDEX].current">Current Job</label>
+                    </div>
+                </div>
+                <div class="form-group remote-job-group">
+                    <div class="checkbox-container">
+                        <input type="checkbox" id="experience[INDEX].remote" name="experience[INDEX].remote" class="remote-job-checkbox">
+                        <label for="experience[INDEX].remote">Remote Position</label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group location-group">
+                <label>Location</label>
+                <input type="text" name="experience[INDEX].location" placeholder="City, State">
+            </div>
+            <div class="form-group">
+                <label>Description</label>
+                <textarea name="experience[INDEX].description" rows="3" placeholder="Describe your responsibilities and achievements"></textarea>
+            </div>
+            <button type="button" class="remove-btn">Remove</button>
+        </div>
+    </template>
+
+    <template id="projectTemplate">
+        <div class="form-item project-item">
+            <div class="form-group">
+                <label>Project Name</label>
+                <input type="text" name="projects[INDEX].name" required>
+            </div>
+            <div class="form-group">
+                <label>Link (Optional)</label>
+                <input type="url" name="projects[INDEX].link" placeholder="https://github.com/username/project">
+            </div>
+            <div class="form-group">
+                <label>Description</label>
+                <textarea name="projects[INDEX].description" rows="3" placeholder="Describe your project, technologies used, and your role"></textarea>
+            </div>
+            <button type="button" class="remove-btn">Remove</button>
+        </div>
+    </template>
+
+    <template id="skillTemplate">
+        <div class="form-item skill-item">
+            <div class="form-group">
+                <label>Skill</label>
+                <input type="text" name="skills[INDEX].name" required>
+            </div>
+            <div class="form-group">
+                <label>Proficiency (Optional)</label>
+                <select name="skills[INDEX].level">
+                    <option value="">Select Level</option>
+                    <option value="Beginner">Beginner</option>
+                    <option value="Intermediate">Intermediate</option>
+                    <option value="Advanced">Advanced</option>
+                    <option value="Expert">Expert</option>
+                </select>
+            </div>
+            <button type="button" class="remove-btn">Remove</button>
+        </div>
+    </template>
+
+    <template id="achievementTemplate">
+        <div class="form-item achievement-item">
+            <div class="form-group">
+                <label>Achievement</label>
+                <textarea name="achievements[INDEX].description" rows="2" placeholder="Describe your achievement"></textarea>
+            </div>
+            <button type="button" class="remove-btn">Remove</button>
+        </div>
+    </template>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize form sections
+            initializeSection('education', '#educationTemplate', '#educationItems', '#addEducation');
+            initializeSection('experience', '#experienceTemplate', '#experienceItems', '#addExperience');
+            initializeSection('project', '#projectTemplate', '#projectItems', '#addProject');
+            initializeSection('skill', '#skillTemplate', '#skillItems', '#addSkill');
+            initializeSection('achievement', '#achievementTemplate', '#achievementItems', '#addAchievement');
+
+            // Add initial items
+            document.querySelector('#addEducation').click();
+            document.querySelector('#addExperience').click();
+            document.querySelector('#addProject').click();
+            document.querySelector('#addSkill').click();
+            document.querySelector('#addAchievement').click();
+
+            // Set up form change listeners for live preview
+            setupFormChangeListeners();
+
+            // Set up download button
+            document.getElementById('downloadBtn').addEventListener('click', downloadResume);
+        });
+
+        function initializeSection(type, templateSelector, containerSelector, addButtonSelector) {
+            const addButton = document.querySelector(addButtonSelector);
+            const container = document.querySelector(containerSelector);
+            const template = document.querySelector(templateSelector).content;
+
+            addButton.addEventListener('click', function() {
+                addItem(type, template, container);
+            });
+        }
+
+        function addItem(type, template, container) {
+            const clone = document.importNode(template, true);
+            const index = container.children.length;
+            
+            // Replace INDEX placeholder with actual index
+            const elements = clone.querySelectorAll('[name*="INDEX"]');
+            elements.forEach(element => {
+                const newName = element.getAttribute('name').replace('INDEX', index);
+                element.setAttribute('name', newName);
+                
+                if (element.id) {
+                    const newId = element.id.replace('INDEX', index);
+                    element.id = newId;
+                }
+            });
+
+            // Set up current job checkbox for experience items
+            if (type === 'experience') {
+    const currentCheckbox = clone.querySelector('.current-job-checkbox');
+    const endDateGroup = clone.querySelector('.end-date-group');
+    
+    currentCheckbox.id = `experience[${index}].current`;
+    currentCheckbox.setAttribute('name', `experience[${index}].current`);
+    
+    currentCheckbox.addEventListener('change', function() {
+        endDateGroup.style.display = this.checked ? 'none' : 'block';
+    });
+    
+    // Set up remote job checkbox
+    const remoteCheckbox = clone.querySelector('.remote-job-checkbox');
+    const locationGroup = clone.querySelector('.location-group');
+    
+    remoteCheckbox.id = `experience[${index}].remote`;
+    remoteCheckbox.setAttribute('name', `experience[${index}].remote`);
+    
+    remoteCheckbox.addEventListener('change', function() {
+        locationGroup.style.display = this.checked ? 'none' : 'block';
+    });
+}
+
+            // Set up remove button
+            const removeButton = clone.querySelector('.remove-btn');
+            removeButton.addEventListener('click', function() {
+                container.removeChild(this.parentNode);
+                updateFormData();
+            });
+
+            container.appendChild(clone);
+            
+            // Update preview after adding item
+            updateFormData();
+        }
+
+        function setupFormChangeListeners() {
+            const form = document.getElementById('resumeForm');
+            
+            // Listen for any input changes
+            form.addEventListener('input', updateFormData);
+            form.addEventListener('change', updateFormData);
+        }
+
+        function updateFormData() {
+            const form = document.getElementById('resumeForm');
+            const formData = new FormData(form);
+            const resumeData = {
+                bioData: {},
+                education: [],
+                experience: [],
+                projects: [],
+                skills: [],
+                achievements: []
+            };
+
+            // Process form data
+            for (const [key, value] of formData.entries()) {
+                if (key.startsWith('education[')) {
+                    const match = key.match(/education\[(\d+)\]\.(.+)/);
+                    if (match) {
+                        const index = parseInt(match[1]);
+                        const field = match[2];
+                        
+                        if (!resumeData.education[index]) {
+                            resumeData.education[index] = {};
+                        }
+                        
+                        resumeData.education[index][field] = value;
+                    }
+                } else if (key.startsWith('experience[')) {
+                    const match = key.match(/experience\[(\d+)\]\.(.+)/);
+                    if (match) {
+                        const index = parseInt(match[1]);
+                        const field = match[2];
+                        
+                        if (!resumeData.experience[index]) {
+                            resumeData.experience[index] = {};
+                        }
+                        
+                        if (field === 'current') {
+                            resumeData.experience[index][field] = true;
+                        } else {
+                            resumeData.experience[index][field] = value;
+                        }
+                    }
+                } else if (key.startsWith('projects[')) {
+                    const match = key.match(/projects\[(\d+)\]\.(.+)/);
+                    if (match) {
+                        const index = parseInt(match[1]);
+                        const field = match[2];
+                        
+                        if (!resumeData.projects[index]) {
+                            resumeData.projects[index] = {};
+                        }
+                        
+                        resumeData.projects[index][field] = value;
+                    }
+                } else if (key.startsWith('skills[')) {
+                    const match = key.match(/skills\[(\d+)\]\.(.+)/);
+                    if (match) {
+                        const index = parseInt(match[1]);
+                        const field = match[2];
+                        
+                        if (!resumeData.skills[index]) {
+                            resumeData.skills[index] = {};
+                        }
+                        
+                        resumeData.skills[index][field] = value;
+                    }
+                } else if (key.startsWith('achievements[')) {
+                    const match = key.match(/achievements\[(\d+)\]\.(.+)/);
+                    if (match) {
+                        const index = parseInt(match[1]);
+                        const field = match[2];
+                        
+                        if (!resumeData.achievements[index]) {
+                            resumeData.achievements[index] = {};
+                        }
+                        
+                        resumeData.achievements[index][field] = value;
+                    }
+                } else {
+                    // Bio data fields
+                    resumeData.bioData[key] = value;
+                }
+            }
+
+            // Clean up empty items
+            resumeData.education = resumeData.education.filter(item => item && item.institution);
+            resumeData.experience = resumeData.experience.filter(item => item && item.title);
+            resumeData.projects = resumeData.projects.filter(item => item && item.name);
+            resumeData.skills = resumeData.skills.filter(item => item && item.name);
+            resumeData.achievements = resumeData.achievements.filter(item => item && item.description);
+
+            // Update preview
+            updateResumePreview(resumeData);
+        }
+
+        function updateResumePreview(resumeData) {
+            const previewContainer = document.getElementById('resumePreview');
+            
+            // Send data to server for preview generation
+            fetch('/preview', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(resumeData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.html) {
+                    previewContainer.innerHTML = data.html;
+                }
+            })
+            .catch(error => {
+                console.error('Error generating preview:', error);
+            });
+        }
+
+        function downloadResume() {
+            // Get the resume preview element
+            const resumePreview = document.getElementById('resumePreview');
+            
+            // Check if preview is empty
+            if (resumePreview.querySelector('.placeholder-text')) {
+                alert('Please fill out the form to generate a resume first.');
+                return;
+            }
+            
+            // Call the generatePDF function
+            generatePDF();
+        }
+        
+        // Add PDF generation function
+        function generatePDF() {
+            // Collect form data
+            const form = document.getElementById('resumeForm');
+            const formData = new FormData(form);
+            const resumeData = {
+                bioData: {},
+                education: [],
+                experience: [],
+                projects: [],
+                skills: [],
+                achievements: []
+            };
+            
+            // Process form data
+            for (const [key, value] of formData.entries()) {
+                if (key.startsWith('education[')) {
+                    const match = key.match(/education\[(\d+)\]\.(.+)/);
+                    if (match) {
+                        const index = parseInt(match[1]);
+                        const field = match[2];
+                        
+                        if (!resumeData.education[index]) {
+                            resumeData.education[index] = {};
+                        }
+                        
+                        resumeData.education[index][field] = value;
+                    }
+                } else if (key.startsWith('experience[')) {
+                    const match = key.match(/experience\[(\d+)\]\.(.+)/);
+                    if (match) {
+                        const index = parseInt(match[1]);
+                        const field = match[2];
+                        
+                        if (!resumeData.experience[index]) {
+                            resumeData.experience[index] = {};
+                        }
+                        
+                        if (field === 'current') {
+                            resumeData.experience[index][field] = true;
+                        } else {
+                            resumeData.experience[index][field] = value;
+                        }
+                    }
+                } else if (key.startsWith('projects[')) {
+                    const match = key.match(/projects\[(\d+)\]\.(.+)/);
+                    if (match) {
+                        const index = parseInt(match[1]);
+                        const field = match[2];
+                        
+                        if (!resumeData.projects[index]) {
+                            resumeData.projects[index] = {};
+                        }
+                        
+                        resumeData.projects[index][field] = value;
+                    }
+                } else if (key.startsWith('skills[')) {
+                    const match = key.match(/skills\[(\d+)\]\.(.+)/);
+                    if (match) {
+                        const index = parseInt(match[1]);
+                        const field = match[2];
+                        
+                        if (!resumeData.skills[index]) {
+                            resumeData.skills[index] = {};
+                        }
+                        
+                        resumeData.skills[index][field] = value;
+                    }
+                } else if (key.startsWith('achievements[')) {
+                    const match = key.match(/achievements\[(\d+)\]\.(.+)/);
+                    if (match) {
+                        const index = parseInt(match[1]);
+                        const field = match[2];
+                        
+                        if (!resumeData.achievements[index]) {
+                            resumeData.achievements[index] = {};
+                        }
+                        
+                        resumeData.achievements[index][field] = value;
+                    }
+                } else {
+                    // Bio data fields
+                    resumeData.bioData[key] = value;
+                }
+            }
+            
+            // Clean up empty items
+            resumeData.education = resumeData.education.filter(item => item && item.institution);
+            resumeData.experience = resumeData.experience.filter(item => item && item.title);
+            resumeData.projects = resumeData.projects.filter(item => item && item.name);
+            resumeData.skills = resumeData.skills.filter(item => item && item.name);
+            resumeData.achievements = resumeData.achievements.filter(item => item && item.description);
+            
+            // Send to server for PDF generation
+            fetch('/generate_pdf', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(resumeData)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Server error: ' + response.status);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    // Create download link
+                    const downloadLink = document.createElement('a');
+                    downloadLink.href = data.path;
+                    downloadLink.download = data.filename;
+                    downloadLink.click();
+                } else {
+                    alert('Error generating PDF: ' + (data.error || 'Unknown error'));
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error generating PDF: ' + error.message);
+            });
+        }
+        
+        // Function to collect form data (you already have this or similar)
+        function collectFormData() {
+            const form = document.getElementById('resumeForm');
+            const formData = new FormData(form);
+            const resumeData = {
+                bioData: {},
+                education: [],
+                experience: [],
+                projects: [],
+                skills: [],
+                achievements: []
+            };
+            
+            // Process form data
+            for (const [key, value] of formData.entries()) {
+                if (key.startsWith('education[')) {
+                    const match = key.match(/education\[(\d+)\]\.(.+)/);
+                    if (match) {
+                        const index = parseInt(match[1]);
+                        const field = match[2];
+                        
+                        if (!resumeData.education[index]) {
+                            resumeData.education[index] = {};
+                        }
+                        
+                        resumeData.education[index][field] = value;
+                    }
+                } else if (key.startsWith('experience[')) {
+                    const match = key.match(/experience\[(\d+)\]\.(.+)/);
+                    if (match) {
+                        const index = parseInt(match[1]);
+                        const field = match[2];
+                        
+                        if (!resumeData.experience[index]) {
+                            resumeData.experience[index] = {};
+                        }
+                        
+                        if (field === 'current') {
+                            resumeData.experience[index][field] = true;
+                        } else {
+                            resumeData.experience[index][field] = value;
+                        }
+                    }
+                } else if (key.startsWith('projects[')) {
+                    const match = key.match(/projects\[(\d+)\]\.(.+)/);
+                    if (match) {
+                        const index = parseInt(match[1]);
+                        const field = match[2];
+                        
+                        if (!resumeData.projects[index]) {
+                            resumeData.projects[index] = {};
+                        }
+                        
+                        resumeData.projects[index][field] = value;
+                    }
+                } else if (key.startsWith('skills[')) {
+                    const match = key.match(/skills\[(\d+)\]\.(.+)/);
+                    if (match) {
+                        const index = parseInt(match[1]);
+                        const field = match[2];
+                        
+                        if (!resumeData.skills[index]) {
+                            resumeData.skills[index] = {};
+                        }
+                        
+                        resumeData.skills[index][field] = value;
+                    }
+                } else if (key.startsWith('achievements[')) {
+                    const match = key.match(/achievements\[(\d+)\]\.(.+)/);
+                    if (match) {
+                        const index = parseInt(match[1]);
+                        const field = match[2];
+                        
+                        if (!resumeData.achievements[index]) {
+                            resumeData.achievements[index] = {};
+                        }
+                        
+                        resumeData.achievements[index][field] = value;
+                    }
+                } else {
+                    // Bio data fields
+                    resumeData.bioData[key] = value;
+                }
+            }
+            
+            // Clean up empty items
+            resumeData.education = resumeData.education.filter(item => item && item.institution);
+            resumeData.experience = resumeData.experience.filter(item => item && item.title);
+            resumeData.projects = resumeData.projects.filter(item => item && item.name);
+            resumeData.skills = resumeData.skills.filter(item => item && item.name);
+            resumeData.achievements = resumeData.achievements.filter(item => item && item.description);
+            
+            return resumeData;
+        }
+    </script>
+</body>
+</html>

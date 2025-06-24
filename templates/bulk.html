@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bulk Resume Screening</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <style>
+        /* Hero Section Adjustments */
+        .hero-results {
+            padding: 20px 20px;
+            text-align: left;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-results .hero-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-left: 30px;
+        }
+
+        .hero-results h1 {
+            font-size: 56px;
+            margin-bottom: 15px;
+            line-height: 1.2;
+        }
+
+        .hero-results p {
+            font-size: 22px;
+            margin-bottom: 20px;
+            max-width: 800px;
+        }
+    
+        /* Button Styling */
+        .upload-btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+    
+        .upload-btn:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+    
+        .file-uploaded {
+            background-color: #28a745;
+        }
+    
+        .submit-btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 15px;
+            transition: background-color 0.3s, transform 0.2s;
+            width: 100%;
+            max-width: 300px;
+        }
+    
+        .submit-btn:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+        
+        /* Modern Form Styling */
+        .main-content {
+            padding: 40px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        textarea[name="job_description"] {
+            width: 100%;
+            min-height: 180px;
+            padding: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 16px;
+            color: white;
+            resize: vertical;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+            backdrop-filter: blur(10px);
+        }
+        
+        textarea[name="job_description"]:focus {
+            border-color: #007bff;
+            outline: none;
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+        
+        textarea[name="job_description"]::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .form-container {
+            position: relative;
+            z-index: 10;
+        }
+        
+        .supported-formats {
+            color: rgba(255, 255, 255, 0.7);
+            text-align: center;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+        
+        .button-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 15px;
+        }
+
+        /* Split Layout Styling */
+        .split-container {
+            display: flex;
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .split-section {
+            flex: 1;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+        }
+
+        .section-title {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: white;
+            text-align: center;
+        }
+
+        .section-description {
+            font-size: 16px;
+            margin-bottom: 20px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* Dropdown Styling */
+        select[name="job_role"] {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 16px;
+            color: white;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+            backdrop-filter: blur(10px);
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23FFFFFF%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+            background-repeat: no-repeat;
+            background-position: right 15px top 50%;
+            background-size: 12px auto;
+        }
+
+        select[name="job_role"]:focus {
+            border-color: #007bff;
+            outline: none;
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+
+        /* Fix dropdown option colors */
+        select[name="job_role"] option {
+            background-color: white;
+            color: black;
+            padding: 10px;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .split-container {
+                flex-direction: column;
+            }
+            
+            .split-section {
+                margin-bottom: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <header class="navbar">
+        <div class="container">
+            <a href="{{ url_for('index') }}" class="logo-link">
+                <img src="{{ url_for('static', filename='favicon.ico') }}" alt="Resume Decoder Logo" class="logo">
+                <h1>Resume Decoder</h1>
+            </a>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="{{ url_for('index') }}">Home</a></li>
+                    <li><a href="{{ url_for('index') }}#features">Features</a></li>
+                    <li><a href="{{ url_for('index') }}#how-it-works">How It Works</a></li>
+                    <li><a href="{{ url_for('index') }}#testimonials">Testimonials</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-results">
+        <div class="hero-content">
+            <h1>Bulk Resume Screening</h1>
+            <p>Upload multiple resumes and match them against a job description or select a job role to find the best candidates.</p>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="split-container">
+            <!-- Left Section: Job Description Based Matching -->
+            <div class="split-section">
+                <h2 class="section-title">Match by Job Description</h2>
+                <p class="section-description">Enter a specific job description to match against uploaded resumes.</p>
+                
+                <form method="POST" action="{{ url_for('bulk_screen') }}" enctype="multipart/form-data">
+                    <textarea name="job_description" placeholder="Enter the job description here to match against resumes..." required></textarea>
+                    <div class="button-container">
+                        <div class="file-input">
+                            <input type="file" name="resumes" accept=".pdf,.docx" multiple required id="resumes-jd" style="opacity: 0; position: absolute; z-index: -1;">
+                            <button type="button" id="upload-button-jd" class="upload-btn">Upload Resumes (Max 20)</button>
+                        </div>
+                    </div>
+                    <div class="button-container">
+                        <button type="submit" id="submit-button-jd" class="submit-btn" style="display: none;">Upload and Rank by Job Description</button>
+                    </div>
+
+                </form>
+            </div>
+            
+            <!-- Right Section: Job Role Based Matching -->
+            <div class="split-section">
+                <h2 class="section-title">Match by Job Role</h2>
+                <p class="section-description">Select a predefined job role to match against uploaded resumes.</p>
+                
+                <form method="POST" action="{{ url_for('bulk_screen_by_role') }}" enctype="multipart/form-data">
+                    <select name="job_role" required>
+                        <option value="" disabled selected>Select a job role</option>
+                        {% for role in job_roles %}
+                        <option value="{{ role }}">{{ role }}</option>
+                        {% endfor %}
+                    </select>
+                    <div class="button-container">
+                        <div class="file-input">
+                            <input type="file" name="resumes" accept=".pdf,.docx" multiple required id="resumes-role" style="opacity: 0; position: absolute; z-index: -1;">
+                            <button type="button" id="upload-button-role" class="upload-btn">Upload Resumes (Max 20)</button>
+                        </div>
+                    </div>
+                    <div class="button-container">
+                        <button type="submit" id="submit-button-role" class="submit-btn" style="display: none;">Upload and Rank by Job Role</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="sticky-footer">
+        <div class="container">
+            <p>Made by Prakhar Singh</p>
+            <a href="https://github.com/prakharssingh" target="_blank">
+                <img src="{{ url_for('static', filename='github-icon.png') }}" alt="GitHub" class="github-icon">
+            </a>
+        </div>
+    </footer>
+
+    <script>
+        // Script for job description form
+        const fileInputJd = document.getElementById('resumes-jd');
+        const uploadButtonJd = document.getElementById('upload-button-jd');
+        const submitButtonJd = document.getElementById('submit-button-jd');
+
+        fileInputJd.addEventListener('change', function () {
+            if (fileInputJd.files.length > 0) {
+                uploadButtonJd.textContent = `${fileInputJd.files.length} files selected`;
+                uploadButtonJd.classList.add('file-uploaded');
+                submitButtonJd.style.display = 'block';
+            } else {
+                uploadButtonJd.textContent = 'Upload Resumes (Max 20)';
+                uploadButtonJd.classList.remove('file-uploaded');
+                submitButtonJd.style.display = 'none';
+            }
+        });
+
+        uploadButtonJd.addEventListener('click', function () {
+            fileInputJd.click();
+        });
+
+        // Script for job role form
+        const fileInputRole = document.getElementById('resumes-role');
+        const uploadButtonRole = document.getElementById('upload-button-role');
+        const submitButtonRole = document.getElementById('submit-button-role');
+
+        fileInputRole.addEventListener('change', function () {
+            if (fileInputRole.files.length > 0) {
+                uploadButtonRole.textContent = `${fileInputRole.files.length} files selected`;
+                uploadButtonRole.classList.add('file-uploaded');
+                submitButtonRole.style.display = 'block';
+            } else {
+                uploadButtonRole.textContent = 'Upload Resumes (Max 20)';
+                uploadButtonRole.classList.remove('file-uploaded');
+                submitButtonRole.style.display = 'none';
+            }
+        });
+
+        uploadButtonRole.addEventListener('click', function () {
+            fileInputRole.click();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,6 @@
+flask==3.1.0
+docx2txt==0.8
+pdfminer.six==20250327
+nltk==3.9.1
+scikit-learn==1.6.1
+reportlab==4.4.0

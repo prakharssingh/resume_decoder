@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Decoder - Your Complete Resume Solution</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <header class="navbar">
+        <div class="container">
+            <a href="{{ url_for('index') }}" class="logo-link">
+                <img src="{{ url_for('static', filename='favicon.ico') }}" alt="Resume Decoder Logo" class="logo">
+                <h1>Resume Decoder</h1>
+            </a>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="{{ url_for('index') }}">Home</a></li>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#how-it-works">How It Works</a></li>
+                    <li><a href="#testimonials">Testimonials</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Unlock Your Career Potential with Resume Decoder</h1>
+            <p>The all-in-one platform for resume analysis, optimization, and creation</p>
+            
+            <!-- Feature Cards -->
+            <div class="feature-cards">
+                <div class="feature-card">
+                    <div class="card-icon">
+                        <i class="fas fa-user-check"></i>
+                    </div>
+                    <h3>Individual Resume Insights</h3>
+                    <p>Get personalized feedback and ATS score analysis for your resume</p>
+                    <form method="POST" enctype="multipart/form-data" class="upload-form">
+                        <div class="file-input">
+                            <input type="file" name="resume" accept=".pdf,.docx" required id="resume">
+                            <button type="button" id="upload-button">Upload Resume</button>
+                        </div>
+                        <button type="submit" id="submit-button" style="display: none;">Analyze Resume</button>
+                    </form>
+                    <p class="supported-formats">Supported formats: PDF, DOCX</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="card-icon">
+                        <i class="fas fa-building"></i>
+                    </div>
+                    <h3>Bulk Resume Screening</h3>
+                    <p>Simplify recruitment by sorting and ranking multiple resumes automatically</p>
+                    <a href="{{ url_for('bulk_screen') }}" class="card-button">Screen Resumes</a>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="card-icon">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <h3>ATS-Friendly Resume Builder</h3>
+                    <p>Create professional, ATS-optimized resumes without learning LaTeX</p>
+                    <a href="{{ url_for('builder') }}" class="card-button">Build Resume</a>
+                </div>
+            </div>
+        </div>
+        <div class="hero-background"></div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="container">
+            <h2>Why Choose Resume Decoder?</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <i class="fas fa-robot feature-icon"></i>
+                    <h3>ATS Score Analysis</h3>
+                    <p>Get detailed insights into how well your resume performs against Applicant Tracking Systems with actionable improvement tips.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-search feature-icon"></i>
+                    <h3>Skill Gap Analysis</h3>
+                    <p>Identify missing skills and get personalized recommendations to enhance your resume for specific job roles.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-sort-amount-up feature-icon"></i>
+                    <h3>Resume Ranking</h3>
+                    <p>For recruiters: automatically sort and rank multiple resumes based on job descriptions to find the best candidates.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-pencil-alt feature-icon"></i>
+                    <h3>Professional Templates</h3>
+                    <p>Access modern, ATS-friendly resume templates designed to maximize your chances of getting past automated screening.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-graduation-cap feature-icon"></i>
+                    <h3>Course Suggestions</h3>
+                    <p>Receive tailored course recommendations to upskill and stay competitive in your target job market.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-briefcase feature-icon"></i>
+                    <h3>Job Role Recommendation</h3>
+                    <p>Get personalized job role suggestions based on your skills, experience, and career interests to discover new opportunities.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-hand-pointer feature-icon"></i>
+                    <h3>Intuitive User Experience</h3>
+                    <p>Navigate our platform with ease - designed for simplicity with a clean interface that requires no technical expertise to master.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-magic feature-icon"></i>
+                    <h3>One-Click Generation</h3>
+                    <p>Create professional, perfectly formatted resumes with just a few clicks - no design skills required.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="how-it-works">
+        <div class="container">
+            <h2>How It Works</h2>
+            
+            <div class="tabs">
+                <div class="tab-buttons">
+                    <button class="tab-button active" data-tab="individual">Individual Analysis</button>
+                    <button class="tab-button" data-tab="bulk">Bulk Screening</button>
+                    <button class="tab-button" data-tab="builder">Resume Builder</button>
+                </div>
+                
+                <div class="tab-content">
+                    <div class="tab-pane active" id="individual-tab">
+                        <div class="steps">
+                            <div class="step">
+                                <div class="step-number">1</div>
+                                <h3>Upload Your Resume</h3>
+                                <p>Upload your existing resume in PDF or DOCX format.</p>
+                            </div>
+                            <div class="step">
+                                <div class="step-number">2</div>
+                                <h3>Get ATS Score & Analysis</h3>
+                                <p>Receive a detailed ATS compatibility score and personalized feedback.</p>
+                            </div>
+                            <div class="step">
+                                <div class="step-number">3</div>
+                                <h3>Implement Suggestions</h3>
+                                <p>Follow our actionable recommendations to improve your resume's effectiveness.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="tab-pane" id="bulk-tab">
+                        <div class="steps">
+                            <div class="step">
+                                <div class="step-number">1</div>
+                                <h3>Upload Multiple Resumes</h3>
+                                <p>Upload a batch of candidate resumes (up to 20 at once).</p>
+                            </div>
+                            <div class="step">
+                                <div class="step-number">2</div>
+                                <h3>Enter Job Description</h3>
+                                <p>Provide the job description or select a predefined job role.</p>
+                            </div>
+                            <div class="step">
+                                <div class="step-number">3</div>
+                                <h3>Review Ranked Results</h3>
+                                <p>Get an automatically sorted list of candidates based on resume-job match scores.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="tab-pane" id="builder-tab">
+                        <div class="steps">
+                            <div class="step">
+                                <div class="step-number">1</div>
+                                <h3>Fill in Your Details</h3>
+                                <p>Enter your information in our user-friendly form sections.</p>
+                            </div>
+                            <div class="step">
+                                <div class="step-number">2</div>
+                                <h3>Preview Your Resume</h3>
+                                <p>See real-time updates as you build your ATS-optimized resume.</p>
+                            </div>
+                            <div class="step">
+                                <div class="step-number">3</div>
+                                <h3>Download & Apply</h3>
+                                <p>Get your professionally formatted resume as a PDF ready for job applications.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="testimonials">
+        <div class="container">
+            <h2>Success Stories</h2>
+            <div class="testimonial-grid">
+                <div class="testimonial-card">
+                    <div class="testimonial-avatar">
+                        <i class="fas fa-user-circle"></i>
+                    </div>
+                    <p>"Resume Decoder's ATS analysis helped me understand why I wasn't getting callbacks. After implementing the suggestions, I got three interview calls in a week!"</p>
+                    <p class="author">— Sarah T., Software Engineer</p>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-avatar">
+                        <i class="fas fa-user-circle"></i>
+                    </div>
+                    <p>"As a hiring manager, the bulk screening tool saved me hours of manual resume review. It accurately identified candidates with the skills we needed."</p>
+                    <p class="author">— John D., HR Director</p>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-avatar">
+                        <i class="fas fa-user-circle"></i>
+                    </div>
+                    <p>"I was struggling with formatting my resume in Word. The Resume Builder made it so easy to create a professional, ATS-friendly resume in minutes!"</p>
+                    <p class="author">— Emily R., Marketing Specialist</p>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-avatar">
+                        <i class="fas fa-user-circle"></i>
+                    </div>
+                    <p>"The skill gap analysis was eye-opening. It showed me exactly what I needed to learn to qualify for senior positions in my field. Within three months of targeted learning, I landed my dream job!"</p>
+                    <p class="author">— Michael K., Data Scientist</p>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-avatar">
+                        <i class="fas fa-user-circle"></i>
+                    </div>
+                    <p>"As a career changer, I was struggling to highlight my transferable skills. The Resume Builder helped me create a targeted resume that emphasized my relevant experience, and I got interviews in my new field right away."</p>
+                    <p class="author">— Priya M., UX Designer</p>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-avatar">
+                        <i class="fas fa-user-circle"></i>
+                    </div>
+                    <p>"The course recommendations were spot-on! I completed two of the suggested courses and added those skills to my resume. My interview callback rate increased by 40% almost immediately."</p>
+                    <p class="author">— Alex T., Frontend Developer</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="sticky-footer">
+        <div class="container">
+            <p>Made by Prakhar Singh</p>
+            <a href="https://github.com/prakharssingh" target="_blank">
+                <img src="{{ url_for('static', filename='github-icon.png') }}" alt="GitHub" class="github-icon">
+            </a>
+        </div>
+    </footer>
+
+    <script>
+        // File upload handling
+        const fileInput = document.getElementById('resume');
+        const uploadButton = document.getElementById('upload-button');
+        const submitButton = document.getElementById('submit-button');
+
+        fileInput.addEventListener('change', function () {
+            if (fileInput.files.length > 0) {
+                const fileName = fileInput.files[0].name;
+                const maxLength = 20;
+                let displayName = fileName;
+                if (fileName.length > maxLength) {
+                    displayName = fileName.substring(0, maxLength) + '...';
+                }
+                uploadButton.textContent = displayName;
+                uploadButton.classList.add('file-uploaded');
+                submitButton.style.display = 'block';
+            } else {
+                uploadButton.textContent = 'Upload Resume';
+                uploadButton.classList.remove('file-uploaded');
+                submitButton.style.display = 'none';
+            }
+        });
+
+        uploadButton.addEventListener('click', function () {
+            fileInput.click();
+        });
+        
+        // Tab functionality
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const tabPanes = document.querySelectorAll('.tab-pane');
+        
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Remove active class from all buttons and panes
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                tabPanes.forEach(pane => pane.classList.remove('active'));
+                
+                // Add active class to clicked button and corresponding pane
+                button.classList.add('active');
+                const tabId = button.getAttribute('data-tab');
+                document.getElementById(`${tabId}-tab`).classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>

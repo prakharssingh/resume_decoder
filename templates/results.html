@@ -1,0 +1,232 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Parser - Results</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+</head>
+<body>
+    <div class="container results">
+        <h1>Resume Analysis Options</h1>
+        <p><strong>Name:</strong> {{ name }}</p>
+        <p><strong>Contact Number:</strong> {{ contact_number }}</p>
+        <p><strong>Email:</strong> {{ email }}</p>
+        <p><strong>Education:</strong> {{ education }}</p>
+        <p><strong>GPA:</strong> {{ gpa if gpa else 'N/A' }}</p>
+        <h2>Choose an Option:</h2>
+        <div class="btn-wrapper">
+            <a href="{{ url_for('ats_score') }}" class="btn">Check ATS Score</a>
+            <a href="{{ url_for('job_roles') }}" class="btn">Job Role Recommendations</a>
+            <a href="{{ url_for('skills') }}" class="btn">Skill Recommendations</a>
+            <a href="{{ url_for('courses') }}" class="btn">Course Recommendations</a>
+        </div>
+    </div>
+
+    <div class="page-footer">
+        <p>Made by Prakhar Singh</p>
+        <a href="https://github.com/prakharssingh" target="_blank">
+            <img src="{{ url_for('static', filename='github-icon.png') }}" alt="GitHub" class="github-icon">
+        </a>
+    </div>
+</body>
+</html> -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Decoder - Results</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <style>
+        /* Hero Section Adjustments */
+        .hero-results {
+            padding: 20px 20px; /* Reduced padding to decrease space */
+            text-align: left;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-results .hero-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-left: 30px; /* Slight offset from the left edge */
+        }
+
+        .hero-results h1 {
+            font-size: 56px; /* Larger heading */
+            margin-bottom: 15px;
+            line-height: 1.2;
+        }
+
+        .hero-results p {
+            font-size: 22px; /* Larger subtitle */
+            margin-bottom: 20px;
+            max-width: 800px;
+        }
+
+        /* Main Content Adjustments */
+        .main-content {
+            margin-top: -20; /* Remove any extra space above main content */
+        }
+
+        /* Info Section Styling */
+        .info-section {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            background: none; /* Remove white background */
+            box-shadow: none; /* Remove card shadow */
+            border-radius: 0; /* Remove card border radius */
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .info-item strong {
+            color: #007bff;
+            font-size: 18px;
+            min-width: 150px;
+        }
+
+        .info-item span {
+            color: #fff;
+            font-size: 16px;
+        }
+
+        /* Button Grid Styling */
+        .button-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .option-button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            text-align: center;
+            text-decoration: none;
+            width: auto;
+        }
+
+        .option-button:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero-results h1 {
+                font-size: 40px;
+            }
+
+            .hero-results p {
+                font-size: 18px;
+            }
+
+            .button-grid {
+                grid-template-columns: 1fr; /* Stack buttons on small screens */
+                max-width: 300px; /* Adjust for smaller screens */
+            }
+
+            .info-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .info-item strong {
+                min-width: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <header class="navbar">
+        <div class="container">
+            <a href="{{ url_for('index') }}" class="logo-link">
+                <img src="{{ url_for('static', filename='favicon.ico') }}" alt="Resume Decoder Logo" class="logo">
+                <h1>Resume Decoder</h1>
+            </a>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="{{ url_for('index') }}">Home</a></li>
+                    <li><a href="{{ url_for('index', _anchor='features') }}">Features</a></li>
+                    <li><a href="{{ url_for('index', _anchor='how-it-works') }}">How It Works</a></li>
+                    <li><a href="{{ url_for('index', _anchor='testimonials') }}">Testimonials</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-results">
+        <div class="hero-content">
+            <h1>Your Resume Has Been Analyzed!</h1>
+            <p>Discover actionable insights to improve your resume and boost your chances of landing your dream job.</p>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="info-section">
+            <div class="info-item">
+                <strong>Name:</strong>
+                <span>{{ name if name else 'N/A' }}</span>
+            </div>
+            <div class="info-item">
+                <strong>Contact Number:</strong>
+                <span>{{ contact_number if contact_number else 'N/A' }}</span>
+            </div>
+            <div class="info-item">
+                <strong>Email:</strong>
+                <span>{{ email if email else 'N/A' }}</span>
+            </div>
+            <div class="info-item">
+                <strong>Education:</strong>
+                <span>{{ education if education else 'N/A' }}</span>
+            </div>
+            <div class="info-item">
+                <strong>GPA:</strong>
+                <span>{{ gpa if gpa else 'N/A' }}</span>
+            </div>
+        </div>
+
+        <div class="button-grid">
+            <a href="{{ url_for('ats_score') }}" class="option-button">Check ATS Score</a>
+            <a href="{{ url_for('job_roles') }}" class="option-button">Job Role Recommendations</a>
+            <a href="{{ url_for('skills') }}" class="option-button">Skill Recommendations</a>
+            <a href="{{ url_for('courses') }}" class="option-button">Course Recommendations</a>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="sticky-footer">
+        <div class="container">
+            <p>Made by Prakhar Singh</p>
+            <a href="https://github.com/prakharssingh" target="_blank">
+                <img src="{{ url_for('static', filename='github-icon.png') }}" alt="GitHub profile link" class="github-icon">
+            </a>
+        </div>
+    </footer>
+</body>
+</html>

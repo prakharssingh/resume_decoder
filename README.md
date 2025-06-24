@@ -15,6 +15,9 @@ Resume Decoder is a powerful web application that helps analyze, parse, and crea
   - Work Experience
 - Provides skill matching against various job roles
 - Offers course recommendations based on career paths
+- Supports multiple job roles with specific skill requirements
+- Intelligent skill extraction and matching
+- Bulk resume processing capabilities
 ### Resume Builder
 - Interactive resume creation interface
 - Professional PDF generation
@@ -81,15 +84,3 @@ python app.py
 ```
 2. Access the application through your web browser
 3. Upload resumes for analysis or use the resume builder to create new resumes
-## Features in Detail
-### Resume Analysis
-- Supports multiple job roles with specific skill requirements
-- Intelligent skill extraction and matching
-- Course recommendations based on career paths
-- Bulk resume processing capabilities
-### Resume Builder
-- Clean and professional PDF output
-- Customizable sections and formatting
-- Real-time preview before final generation
-- Social media links integration (GitHub, LinkedIn, Portfolio)
-- Professional formatting with proper spacing and typography

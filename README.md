@@ -35,7 +35,6 @@ Resume Decoder is a powerful web application that helps analyze, parse, and crea
 ### Frontend
 - HTML/CSS
 - JavaScript
-- Responsive design for better user experience
 ## Installation
 1. Clone the repository
 2. Install the required dependencies mentioned in requirements.txt

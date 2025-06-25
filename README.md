@@ -2,7 +2,7 @@
 
 Resume Decoder is a powerful web application that helps analyze, parse, and create professional resumes. It combines resume parsing capabilities with a modern resume builder, making it a comprehensive tool for both job seekers and recruiters.
 
-**Live Demo**: Try the application live at [https://resume-decoder.onrender.com/](https://resume-decoder.onrender.com/)!
+**Live Demo**: Try the application live at [https://resume-decoder.onrender.com/](https://resume-decoder.onrender.com/)
 
 ![image](https://github.com/user-attachments/assets/9dd13f07-ff3a-4c75-ab02-d0dd99a46218)
 ![image](https://github.com/user-attachments/assets/81e5c521-7d17-4f7e-ad42-ab8bd2088e47)
